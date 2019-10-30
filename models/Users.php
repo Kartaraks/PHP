@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+
 class Users extends Model
 {
     public $name;
