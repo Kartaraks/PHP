@@ -1,9 +1,16 @@
 <?php
+use app\models\{Product, Users};
+use app\models\goods\{Rice, Laptop,Game_A};
 
-function __autoload($className){
-    (new Autoload()) -> autoloadClass($className);
-}
+include "../engine/Autoload.php";
 
-$product = new Product();
+spl_autoload_register([new Autoload(), 'autoloadClass']);
 
-var_dump($product);
+$goodsLaptop = new Laptop(200);
+$goodsRice = new Rice(1);
+$goodsGame = new Game_A(50);
+
+echo $goodsLaptop->getPrice(1) . " стоимость ноутбука <br>";
+echo $goodsRice->getPrice(1) . " стоимость риса<br>";
+echo $goodsGame->getPrice(1) . " стоимость игры <br>";
+echo $goodsGame->x = 2;
