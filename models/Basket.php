@@ -12,4 +12,10 @@ class Basket extends Model
     protected $name_img;
     protected $name_good;
     protected $id_order;
+
+    public function getTableName()
+    {
+        return "goods";
+    }
+
 }
