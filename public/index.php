@@ -1,16 +1,52 @@
 <?php
-use app\models\{Product, Users};
-use app\models\goods\{Rice, Laptop,Game_A};
+use app\models\{Product, Users, Basket};
+use app\engine\{Db};
 
-include "../engine/Autoload.php";
+include realpath("../engine/Autoload.php");
+include realpath("../config/config.php");
 
 spl_autoload_register([new Autoload(), 'autoloadClass']);
 
-$goodsLaptop = new Laptop(200);
-$goodsRice = new Rice(1);
-$goodsGame = new Game_A(50);
 
-echo $goodsLaptop->getPrice(1) . " стоимость ноутбука <br>";
-echo $goodsRice->getPrice(1) . " стоимость риса<br>";
-echo $goodsGame->getPrice(1) . " стоимость игры <br>";
-echo $goodsGame->x = 2;
+
+$url = explode("/", $_SERVER['REQUEST_URI']);
+
+$controllerName = empty($url[1])? "product" : $url[1];
+
+$actionName = $url[2];
+
+$controllerClass = CONTROLLER_NAMESPACE .  ucfirst($controllerName) . "Controller";
+
+
+if (class_exists($controllerClass)){
+    $controller = new $controllerClass();
+    $controller->runAction($actionName);
+} else {
+    echo '404';
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+$product = new Product('Kolya', 'opisanieOpisane', 200);
+//var_dump($product->getOne(2));
+//Product::getOne(2);
+$product->save();
+
+var_dump($product);
+
+*/

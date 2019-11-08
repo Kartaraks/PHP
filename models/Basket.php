@@ -4,18 +4,28 @@
 namespace app\models;
 
 
-class Basket extends Model
+class Basket extends DbModels
 {
-    protected $id;
-    protected $price;
-    protected $quantity;
-    protected $name_img;
-    protected $name_good;
-    protected $id_order;
 
-    public function getTableName()
+    public $id;
+    public $session_id;
+    public $good_id;
+
+
+
+    public function __construct($id = null, $session_id = null, $good_id = null)
     {
-        return "goods";
+
+           $this->id = $id;
+           $this->session_id = $session_id;
+           $this->good_id = $good_id;
+
+    }
+
+
+    public static function getTableName()
+    {
+        return "basket";
     }
 
 }
