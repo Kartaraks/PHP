@@ -2,7 +2,7 @@
     Catalog
 </h2>
 
-
+<?php //var_dump($catalog)?>
 
 <?php foreach ($catalog as $key => $value):?>
 
@@ -11,8 +11,9 @@
 <p><?=$value['price']?></p>
 <p><?=$value['description']?></p>
     <a href="/basket/add/?id=<?=$value['id']?>" class="buttonBuy">Buy</a>
+    <a class="buttonBuy" href="/product/update/?id=<?=$value['id']?>">Update</a>
 
 <?php endforeach;?>
 
-<a href="/product/up/">Update</a>
+
 

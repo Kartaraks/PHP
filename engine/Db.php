@@ -62,6 +62,12 @@ class Db
         return $pdoStatement->fetch();
     }
 
+    public function queryObjectAll($sql,$params = [], $class){
+        $pdoStatement = $this->query($sql,$params);
+        $pdoStatement->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $class);
+        return $pdoStatement->fetchAll();
+    }
+
     public function execute($sql,$params){
         $this->query($sql,$params);
         return true;

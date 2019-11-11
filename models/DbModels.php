@@ -22,6 +22,18 @@ abstract class DbModels extends Model
         return Db::getInstance()->queryObject($sql,['id' => $id], static::class);
     }
 
+    public static function getOneTwig($id){
+        $tableName = static::getTableName();
+        $sql = "SELECT * FROM `{$tableName}` WHERE id = :id";
+        return Db::getInstance()->queryOne($sql,['id' => $id]);
+    }
+
+
+    public static function getSessionID($session_id){
+        $tableName = static::getTableName();
+        $sql = "SELECT * FROM `{$tableName}` WHERE session_id = :session_id";
+        return Db::getInstance()->queryAll($sql,['session_id' => $session_id]);
+    }
 
 
     public static function getAll(){
@@ -32,17 +44,25 @@ abstract class DbModels extends Model
     }
 
 
+    public static function getAllObj(){
+        $tableName = static::getTableName();
+        $sql = "SELECT * FROM {$tableName}";
+
+        return Db::getInstance()->queryObjectAll($sql,'',static::class);
+    }
+
 
     public function insert(){
         $params = [];
         $columns = [];
-        foreach ($this as $key => $value){
-            // TODO подумать над улучшением итератора if (организовать массив с нужными значениями)
-            if ($key == 'id') continue;
-            $params[":{$key}"] = $value;
-            $columns[] = "`$key`";
 
+        foreach ($this as $key => $value){
+            if (array_key_exists($key, $this->propsDb)){
+                $params[":{$key}"] = $value;
+                $columns[] = "`$key`";
+            }
         }
+
         $columns = implode(", ", $columns);
         $values = implode(", ", array_keys($params));
         $tableName = static::getTableName();
@@ -56,21 +76,31 @@ abstract class DbModels extends Model
         return $this;
     }
 
-    public function update($changedData){
+    public function update()
+    {
         $params = [];
         $set = '';
-        foreach ($changedData as $key => $value){
-            if ($key == 'props') continue;
-            $params[":{$key}"] = $value;
-            // TODO подумать над улучшением итератора if (организовать массив с нужными значениями)
-            if ($key == 'id') continue;
-            $set.="`".str_replace("`","``",$key)."`". " = :$key, ";
+        $changedData = $this->propsDb;
+
+        foreach ($changedData as $key => $value) {
+            if ($value) {
+                $params[":{$key}"] = $this->$key;
+                $set.="`".str_replace("`","``",$key)."`". " = :$key, ";
+            }
         }
+
+        $params['id'] = $this->id;
+
         $set = substr($set, 0, -2);
+
         $tableName = static::getTableName();
-        $sql = "UPDATE `{$tableName}` SET ".$set." WHERE id = :id";
+        $sql = "UPDATE `{$tableName}` SET " . $set . " WHERE id = :id";
+
         Db::getInstance()->execute($sql,$params);
 
+        $this->id = Db::getInstance()->lastInsertId();
+
+        return $this;
 
     }
 

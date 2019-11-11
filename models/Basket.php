@@ -7,16 +7,20 @@ namespace app\models;
 class Basket extends DbModels
 {
 
-    public $id;
-    public $session_id;
-    public $good_id;
+
+    protected $session_id;
+    protected $good_id;
+
+    public $propsDb = [
+        'session_id' => false,
+        'good_id' => false,
+    ];
 
 
 
-    public function __construct($id = null, $session_id = null, $good_id = null)
+    public function __construct($session_id = null, $good_id = null)
     {
 
-           $this->id = $id;
            $this->session_id = $session_id;
            $this->good_id = $good_id;
 
@@ -27,5 +31,7 @@ class Basket extends DbModels
     {
         return "basket";
     }
+
+
 
 }

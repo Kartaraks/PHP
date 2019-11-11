@@ -1,0 +1,7 @@
+{% for item in catalog %}
+    <p>{{ item.name }}</p>
+    <a href="/product/card/?id={{ item.id }}"><img width="120" src="/img/{{ item.nameImg }}" alt=""></a>
+    <p style="color: red">{{ item.price }}</p>
+    <p>{{ item.description }}</p>
+{% endfor %}
+

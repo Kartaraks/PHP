@@ -5,9 +5,14 @@ namespace app\models;
 
 class Users extends DbModels
 {
-    public $id;
-    public $name;
-    public $sessionId;
+
+    protected $name;
+    protected $sessionId;
+
+    public $propsDb = [
+        'name' => false,
+        'sessionId' => false,
+    ];
 
     public function  __construct ($name = null, $session_id = null)
     {
