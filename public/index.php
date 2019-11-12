@@ -5,10 +5,10 @@ use app\engine\{Render,TwigRender};
 
 include realpath("../engine/Autoload.php");
 include realpath("../config/config.php");
+include realpath("../vendor/autoload.php");
 
 
 spl_autoload_register([new Autoload(), 'autoloadClass']);
-
 
 
 $url = explode("/", $_SERVER['REQUEST_URI']);

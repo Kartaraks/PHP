@@ -15,6 +15,7 @@ class BasketController extends Controller
     }
 
     public function actionAdd(){
+        // TODO  переделать или удалить
         $id = $_GET['id'];
         $basket = new Basket($this->getSession(),'',$id);
         $basket->insert();
@@ -33,12 +34,18 @@ class BasketController extends Controller
 
     private function checkBasketSI($sessionId){
         $basket = Basket::getSessionID($sessionId);
-
+        // TODO перенести этот метод
         if (isset($basket)){
             return $basket;
         } else {
             return false;
         }
+    }
+
+    public function actionAddToBasket(){
+        $data= json_decode(file_get_contents('php://input'));
+        $id = $data->id;
+        echo json_encode(['response' => 'ok', 'id' => $id]);
     }
 
 }

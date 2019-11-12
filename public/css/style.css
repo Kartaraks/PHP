@@ -1,6 +1,16 @@
-.buttonBuy {
+.buy {
     padding: 10px;
     border: 1px solid black;
     color: red;
     background-color: blue;
 }
+
+/*.div_catalog {*/
+    /*display: flex;*/
+
+/*}*/
+
+/*.description {*/
+    /*width: 200px;*/
+    /*height: 200px;*/
+/*}*/
