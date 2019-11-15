@@ -8,11 +8,11 @@
 
 <div class="div_catalog">
     <h3><?=$value['name']?></h3>
-    <a href="/product/card/?id=<?=$value['id']?>"><img width="200" src="/img/<?=$value['nameImg']?>" alt=""></a>
+    <a href="/product/card/<?=$value['id']?>"><img width="200" src="/img/<?=$value['nameImg']?>" alt=""></a>
     <p><?=$value['price']?></p>
     <p class="description"><?=$value['description']?></p>
 
-    <a class="buttonBuy" href="/product/update/?id=<?=$value['id']?>">Update</a>
+    <a class="buttonBuy" href="/product/update/<?=$value['id']?>">Update</a>
     <button data-id="<?=$value['id']?>" class="buy">Купить</button>
 </div>
 
@@ -39,7 +39,12 @@
                     });
 
                     const answer = await response.json();
-                    console.log(answer.id);
+                    console.log(answer);
+                    if (answer.count === 0){
+                        document.getElementById('count').remove();
+                    } else {
+                        document.getElementById('count').innerText = answer.count;
+                    }
                 }
             )()
         })

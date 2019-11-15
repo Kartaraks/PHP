@@ -23,6 +23,7 @@ use app\engine\Db;
          $this->$name = $value;
          $this->propsDb[$name] = true;
 
+
      }
 
 

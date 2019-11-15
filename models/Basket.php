@@ -2,7 +2,7 @@
 
 
 namespace app\models;
-
+use app\engine\Db;
 
 class Basket extends DbModels
 {
@@ -33,5 +33,19 @@ class Basket extends DbModels
     }
 
 
+    public static function getBasket() {
+        $sql = "SELECT p.id id_prod, b.id id_basket, p.name, p.description, p.price, p.nameImg FROM basket b,product p WHERE b.good_id=p.id";
+        return Db::getInstance()->queryAll($sql, []);
+    }
+
+    public static function processingRequestGetCount(){
+        $count = Basket::getCountWhere('session_id', session_id());
+        if ($count == 0){
+            return;
+        } else {
+            return $count;
+        }
+    }
+//AND session_id = :session
 
 }

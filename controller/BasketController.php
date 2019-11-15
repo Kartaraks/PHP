@@ -3,49 +3,47 @@
 
 namespace app\controller;
 
+use app\engine\Request;
 use app\models\Basket;
-use app\models\Product;
+
 
 
 class BasketController extends Controller
 {
 
-    public function actionBasket(){
-
-    }
-
-    public function actionAdd(){
-        // TODO  переделать или удалить
-        $id = $_GET['id'];
-        $basket = new Basket($this->getSession(),'',$id);
-        $basket->insert();
-        header("Location: /basket/");
-    }
 
     public function actionIndex(){
-        $sI = $this->checkBasketSI($this->getSession());
-        if ($sI != false){
-            echo $this->render('basket', ['basket' => $sI]);
+
+        $dataBasket = Basket::getBasket();
+        if ($dataBasket){
+            echo $this->render('basket', ['basket' => $dataBasket]);
         } else {
-            echo "Ваша корзина пуста!";
+            echo "Ваша корзина пуста! Перейдите в каталог для выбора товара <a href='/product/catalog/'>Каталог</a>";
         }
     }
 
 
-    private function checkBasketSI($sessionId){
-        $basket = Basket::getSessionID($sessionId);
-        // TODO перенести этот метод
-        if (isset($basket)){
-            return $basket;
-        } else {
-            return false;
-        }
-    }
 
     public function actionAddToBasket(){
-        $data= json_decode(file_get_contents('php://input'));
-        $id = $data->id;
-        echo json_encode(['response' => 'ok', 'id' => $id]);
+
+        $id = (new Request())->getParams()['id'];
+        (new Basket(session_id(), $id))->insert();
+
+        header('Content-Type: application/json');
+        echo json_encode(['response' => session_id(), 'count' => Basket::getCountWhere('session_id', session_id())]);
+    }
+
+
+    public function actionDelFromBasket(){
+
+        $id = (new Request())->getParams()['id'];
+
+        $count = Basket::getCountWhere('session_id', session_id());
+        $count -= 1;
+
+        (new Basket(session_id(), $id))->delete($id);
+        header('Content-Type: application/json');
+        echo json_encode(['response' => 'ok','id' => $id, 'count' => $count]);
     }
 
 }

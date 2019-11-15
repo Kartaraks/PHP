@@ -62,10 +62,12 @@ class Db
         return $pdoStatement->fetch();
     }
 
-    public function queryObjectAll($sql,$params = [], $class){
-        $pdoStatement = $this->query($sql,$params);
-        $pdoStatement->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $class);
-        return $pdoStatement->fetchAll();
+    private function queryLimit($sql, $from, $to) {
+        $pdoStatement = $this->getConnection()->prepare($sql);
+        $pdoStatement->bindValue(':from', $from, \PDO::PARAM_INT);
+        $pdoStatement->bindValue(':to', $to, \PDO::PARAM_INT);
+        $pdoStatement->execute();
+        return $pdoStatement;
     }
 
     public function execute($sql,$params){

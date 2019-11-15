@@ -8,12 +8,17 @@ abstract class DbModels extends Model
 {
 
 
-    public function getLimit(){
-        //TODO сделать метод
+    public function getLimit($from, $to)
+    {
+        $tableName = static::getTableName();
+        $sql = "SELECT * FROM {$tableName} LIMIT :from, :to";
+        return Db::getInstance()->queryLimit($sql, $from, $to);
     }
 
-    public function getWhere(){
-        //TODO сделать метод
+    public static function getWhere($field, $value){
+        $tableName = static::getTableName();
+        $sql = "SELECT * FROM {$tableName} WHERE `$field`=:value";
+        return Db::getInstance()->queryObject($sql, ["value" => $value], static::class);
     }
 
     public static function getOne($id){
@@ -51,6 +56,12 @@ abstract class DbModels extends Model
         return Db::getInstance()->queryObjectAll($sql,'',static::class);
     }
 
+
+    public static function getCountWhere($field, $value){
+        $tableName = static::getTableName();
+        $sql = "SELECT count(*) as count FROM {$tableName} WHERE `$field`=:value";
+        return Db::getInstance()->queryOne($sql,['value' => $value])['count'];
+    }
 
     public function insert(){
         $params = [];
@@ -105,10 +116,10 @@ abstract class DbModels extends Model
     }
 
 
-    public function delete(){
+    public function delete($id){
         $tableName = static::getTableName();
         $sql = "DELETE FROM {$tableName} WHERE id = :id";
-        return Db::getInstance()->execute($sql, ['id' => $this->id]);
+        return Db::getInstance()->execute($sql, ['id' => $id]);
     }
 
     public function save(){

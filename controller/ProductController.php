@@ -3,6 +3,7 @@
 namespace app\controller;
 
 
+use app\engine\Request;
 use app\models\Product;
 
 class ProductController extends Controller
@@ -20,18 +21,18 @@ public function actionCatalog(){
 }
 
 public function actionCard(){
-    $id =  $_GET['id'];
+    $id =  (new Request())->getArgument();
     $product = Product::getOne($id);
     echo $this->render('card', ['product' => $product]);
-    // TODO сделать красивый вывод. Пример product/card/3
+
 }
 
 public function actionUpdate(){
 
-    $id =  $_GET['id'];
+    $id =  (new Request())->getArgument();
     $product = Product::getOne($id);
     $product->name = 'часы Vacheron Constantin 1';
-    $product->nameImg = 'vacheron_constantin_1.jpg';
+    $product->nameImg = 'vacheron_constantin_2.jpg';
     $product->update();
     header("Location: /product/catalog/");
 }

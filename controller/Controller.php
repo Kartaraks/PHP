@@ -6,6 +6,8 @@ namespace app\controller;
 
 use app\engine\Render;
 use app\interfaces\IRenderer;
+use app\models\Basket;
+use app\models\Users;
 
 class Controller implements IRenderer
 {
@@ -35,7 +37,11 @@ class Controller implements IRenderer
     public function render($template, $params = []){
         if ($this->useLayout){
             return $this->renderTemplate("layouts/{$this->layout}", [
-                'menu' => $this->renderTemplate('menu'),
+                'auth' => Users::isAuth(),
+                'username' => 'admin',
+                'menu' => $this->renderTemplate('menu', [
+                    'count' => Basket::processingRequestGetCount()
+                ]),
                 'content' => $this->renderTemplate($template, $params)
             ]);
         } else {
@@ -48,13 +54,4 @@ class Controller implements IRenderer
     }
 
 
-
-
-
-    public function getSession(){
-        session_start();
-        $sessionId = session_id();
-
-        return $sessionId;
-    }
 }

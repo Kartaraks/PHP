@@ -1,6 +1,8 @@
 <?php
+
+session_start();
 use app\models\{Product, Users, Basket};
-use app\engine\{Render,TwigRender};
+use app\engine\{Render,TwigRender, Request};
 
 
 include realpath("../engine/Autoload.php");
@@ -10,16 +12,15 @@ include realpath("../vendor/autoload.php");
 
 spl_autoload_register([new Autoload(), 'autoloadClass']);
 
+$request = new Request();
 
-$url = explode("/", $_SERVER['REQUEST_URI']);
+$controllerName = $request->getControllerName() ? : 'product';
 
-$controllerName = empty($url[1])? "product" : $url[1];
-
-$actionName = $url[2];
+$actionName = $request->getActionName();
 
 $controllerClass = CONTROLLER_NAMESPACE .  ucfirst($controllerName) . "Controller";
 
-
+$user = Users::getWhere('login','admin');
 
 
 if (class_exists($controllerClass)){
