@@ -4,8 +4,8 @@
 namespace app\controller;
 
 use app\engine\Request;
-use app\models\Basket;
-
+use app\models\entities\Basket;
+use app\models\repositories\BasketRepository;
 
 
 class BasketController extends Controller
@@ -14,7 +14,7 @@ class BasketController extends Controller
 
     public function actionIndex(){
 
-        $dataBasket = Basket::getBasket();
+        $dataBasket = (new BasketRepository()) -> getBasket();
         if ($dataBasket){
             echo $this->render('basket', ['basket' => $dataBasket]);
         } else {
@@ -25,23 +25,27 @@ class BasketController extends Controller
 
 
     public function actionAddToBasket(){
-//TODO настроить метод save чтобы выбирал между insert и update
+
         $id = (new Request())->getParams()['id'];
-        (new Basket(session_id(), $id))->insert();
+
+        (new BasketRepository())->save(new Basket(session_id(), $id));
 
         header('Content-Type: application/json');
-        echo json_encode(['response' => session_id(), 'count' => Basket::getCountWhere('session_id', session_id())]);
+        echo json_encode(['response' => 'ok', 'count' => (new BasketRepository())->getCountWhere('session_id', session_id())]);
     }
 
 
     public function actionDelFromBasket(){
 
         $id = (new Request())->getParams()['id'];
-//TODO Как то так надо, причем еще и сравнить сессию надо было, чтобы не удалить товар в чужой корзине, а у вас можно.
-        $count = Basket::getCountWhere('session_id', session_id());
+
+        $count = (new BasketRepository())->getCountWhere('session_id', session_id());
         $count -= 1;
-// TODO переделать метод, не создавать новый клас корзины чтобы делать удаление, брать уже имеющийся класс Basket::getOne($id)->delete();
-        (new Basket(session_id(), $id))->delete($id);
+        $basket = new Basket();
+        $basket->id = $id;
+        // TODO переделать после 8 урока, не должно быть прямого назначения свойств
+        (new BasketRepository()) -> delete($basket);
+
         header('Content-Type: application/json');
         echo json_encode(['response' => 'ok','id' => $id, 'count' => $count]);
     }

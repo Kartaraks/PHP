@@ -3,11 +3,9 @@
 
 namespace app\controller;
 
-
-use app\engine\Render;
 use app\interfaces\IRenderer;
-use app\models\Basket;
-use app\models\Users;
+use app\models\repositories\BasketRepository;
+use app\models\repositories\UserRepository;
 
 class Controller implements IRenderer
 {
@@ -37,11 +35,10 @@ class Controller implements IRenderer
     public function render($template, $params = []){
         if ($this->useLayout){
             return $this->renderTemplate("layouts/{$this->layout}", [
-                'auth' => Users::isAuth(),
+                'auth' => (new UserRepository())->isAuth(),
                 'username' => 'admin',
-                'menu' => $this->renderTemplate('menu', [
-                    'count' => Basket::processingRequestGetCount()
-                ]),
+                'menu' => $this->renderTemplate('menu',
+                    ['count' => (new BasketRepository())->processingRequestGetCount()]),
                 'content' => $this->renderTemplate($template, $params)
             ]);
         } else {

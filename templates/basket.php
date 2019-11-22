@@ -1,5 +1,5 @@
 <?php
-//var_dump($basket);
+
 ?>
 
 <?php foreach ($basket as $value):?>
@@ -31,7 +31,7 @@
                     });
 
                     const answer = await response.json();
-                    console.log(answer.id);
+
                     if (answer.count === 0){
                         document.getElementById('count').remove();
                     } else {

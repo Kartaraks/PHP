@@ -27,7 +27,7 @@
             let id = elem.getAttribute('data-id');
             (
                 async () => {
-                    const response = await fetch('/basket/addToBasket/', {
+                    const response = await fetch('/basket/AddToBasket/', {
                         method: 'POST',
                         headers: new Headers({
                             'Content-Type': 'application/json'
@@ -39,7 +39,7 @@
                     });
 
                     const answer = await response.json();
-                    console.log(answer);
+
                     if (answer.count === 0){
                         document.getElementById('count').remove();
                     } else {

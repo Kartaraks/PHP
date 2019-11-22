@@ -1,13 +1,13 @@
 <?php
 
 session_start();
-use app\models\{Product, Users, Basket};
-use app\engine\{Render,TwigRender, Request};
+
+use app\engine\{Render, Request};
 
 
 include realpath("../engine/Autoload.php");
 include realpath("../config/config.php");
-include realpath("../vendor/autoload.php");
+//include realpath("../vendor/autoload.php");
 
 
 spl_autoload_register([new Autoload(), 'autoloadClass']);
@@ -20,7 +20,7 @@ $actionName = $request->getActionName();
 
 $controllerClass = CONTROLLER_NAMESPACE .  ucfirst($controllerName) . "Controller";
 
-$user = Users::getWhere('login','admin');
+
 
 
 if (class_exists($controllerClass)){
